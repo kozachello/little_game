@@ -19,19 +19,19 @@ import javafx.stage.Stage;
 public class CanvasEx extends Application {
 
     final int size=500, dot_size=10, up=1, right=2, down=3, left=4;
-    int delay=50, length=3, dir=2, food_x, food_y;
+    int delay=50, length=3, route=3, food_x, food_y;
     Canvas canvas;
     GraphicsContext gc;
-    int x[]=new int[size*size];
-    int y[]=new int[size*size];
+    int x[] = new int[size*size];
+    int y[] = new int[size*size];
     Thread game;
-    boolean lost=false;
+    boolean lost = false;
 
     @Override
     public void start(Stage primaryStage) {
         StackPane root = new StackPane();
-        canvas=new Canvas(size,size);
-        gc=canvas.getGraphicsContext2D();
+        canvas = new Canvas(size,size);
+        gc = canvas.getGraphicsContext2D();
         canvas.setFocusTraversable(true);
         root.getChildren().add(canvas);
         startGame();
@@ -39,18 +39,18 @@ public class CanvasEx extends Application {
         canvas.setOnKeyPressed(new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent e) {
-                KeyCode key=e.getCode();
-                if(key.equals(KeyCode.UP)) dir=up;
-                if(key.equals(KeyCode.DOWN)) dir=down;
-                if(key.equals(KeyCode.LEFT)) dir=left;
-                if(key.equals(KeyCode.RIGHT)) dir=right;
+                KeyCode key = e.getCode();
+                if(key.equals(KeyCode.UP)) route = up;
+                if(key.equals(KeyCode.DOWN)) route = down;
+                if(key.equals(KeyCode.LEFT)) route = left;
+                if(key.equals(KeyCode.RIGHT)) route = right;
                 // В этом участке кода просто добавляем проверки на dir != down (в случае, если KeyCode.UP) и так далее.
             }
         });
 
         Scene scene = new Scene(root, size, size);
 
-        primaryStage.setTitle("Hello World!");
+        primaryStage.setTitle("MyGame");
         primaryStage.setScene(scene);
         primaryStage.show();
 
@@ -85,13 +85,13 @@ public class CanvasEx extends Application {
     }
 
     private void startGame() {
-        length=3;
+        length = 3;
         for(int i=0; i<length; i++){
-            x[i]=50-i*dot_size;
-            y[i]=50;
+            x[i] = 50-i*dot_size;
+            y[i] = 50;
         }
         locateFood();
-        game=new Thread(new Runnable() {
+        game = new Thread(new Runnable() {
 
             @Override
             public void run() {
@@ -114,8 +114,8 @@ public class CanvasEx extends Application {
     }
 
     private void locateFood() {
-        food_x=(int)(Math.random()*((size/dot_size)-1))*dot_size;
-        food_y=(int)(Math.random()*((size/dot_size)-1))*dot_size;
+        food_x = (int)(Math.random()*((size/dot_size)-1))*dot_size;
+        food_y = (int)(Math.random()*((size/dot_size)-1))*dot_size;
     }
 
     private void checkFood() {
@@ -126,23 +126,23 @@ public class CanvasEx extends Application {
     }
 
     private void checkCollision() {
-        if(x[0]>=size) lost=true;
-        if(y[0]>=size) lost=true;
-        if(x[0]<0) lost=true;
-        if(y[0]<0) lost=true;
+        if(x[0] >= size) lost = true;
+        if(y[0] >= size) lost = true;
+        if(x[0] < 0) lost = true;
+        if(y[0] < 0) lost = true;
         for(int i=3; i<length; i++)
-            if(x[0]==x[i] && y[0]==y[i]) lost=true;
+            if(x[0]==x[i] && y[0]==y[i]) lost = true;
     }
 
     private void move() {
-        for(int i=length-1;i>0;i--){
-            x[i]=x[i-1];
-            y[i]=y[i-1];
+        for(int i=length-1; i>0; i--){
+            x[i] = x[i-1];
+            y[i] = y[i-1];
         }
-        if(dir==up)y[0]-=dot_size;
-        if(dir==down)y[0]+=dot_size;
-        if(dir==right)x[0]+=dot_size;
-        if(dir==left)x[0]-=dot_size;
+        if(route==up) y[0]-=dot_size;
+        if(route==down) y[0]+=dot_size;
+        if(route==right) x[0]+=dot_size;
+        if(route==left) x[0]-=dot_size;
     }
 
 }
