@@ -18,23 +18,26 @@ import javafx.stage.Stage;
 
 public class Game extends Application {
 
-    final int size=500, dot_size=20, right=2, down=3, left=4;
-    int speed=250, length=3, route=3;
+    final int size=800, dot_size=40, right=2, down=3, left=4;
+    int speeddelay=500, length=1, route=3, ball_x, ball_y;
     Canvas canvas;
     GraphicsContext gc;
     int x[] = new int[size*size];
     int y[] = new int[size*size];
     Thread game;
-    boolean lost = false;
+    boolean ballIsLocated = false;
 
     @Override
     public void start(Stage primaryStage) throws Exception {
+        //Button button = new Button("STOP");
+        //ImageView image = new ImageView("home/anonymous.jpg");
         StackPane root = new StackPane();
         canvas = new Canvas(size,size);
         gc = canvas.getGraphicsContext2D();
         canvas.setFocusTraversable(true);
+        //root.getChildren().add(image);
         root.getChildren().add(canvas);
-        //startGame();
+        startGame();
 
         canvas.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
@@ -64,14 +67,14 @@ public class Game extends Application {
 
     private void draw(GraphicsContext gc) {
         gc.clearRect(0, 0, size, size);
-        if(!lost) {
+        if(!ballIsLocated) {
             //gc.setFill(Paint.valueOf("green"));
             //gc.fillOval(dot_size, dot_size);
             gc.setFill(Paint.valueOf("red"));
             gc.fillOval(x[0], y[0], dot_size, dot_size);
-            gc.setFill(Paint.valueOf("orange"));
+            //gc.setFill(Paint.valueOf("orange"));
 
-            for(int i=1; i<length; i++) {
+            for(int i=0; i<length; i++) { // must check here!!!
                 gc.fillOval(x[i], y[i], dot_size, dot_size);
             }
 
@@ -83,26 +86,28 @@ public class Game extends Application {
     }
 
     private void startGame() {
-        length = 3;
-        for(int i=0; i<length; i++){
-            x[i] = 250-i*dot_size;
+        length = 1;
+        for(int i=0; i<length; i++) { // must check here!!!
+            x[i] = 300-i*dot_size;
             y[i] = 30;
         }
-        //locateFood();
+        //locateBall();
         game = new Thread(new Runnable() {
 
             @Override
             public void run() {
                 while(true){
-                    if(!lost){
-                        //checkFood();
-                        //checkCollision();
+                    if(!ballIsLocated){
+                        checkBall();
+                        checkCollision();
                         move();
                     }
                     draw(gc);
                     try{
-                        Thread.sleep(speed);
-                    } catch(Exception e){};
+                        Thread.sleep(speeddelay);
+                    } catch(Exception e){
+                        e.printStackTrace();
+                    }
                 }
             }
 
@@ -115,15 +120,43 @@ public class Game extends Application {
         launch(args);
     }
 
+    private void locateBall() {
+        ball_x = x[0];
+        ball_y = y[0];
+        ballIsLocated = true;
+    }
+
+    private void checkBall() {
+        if(y[0]==490) {
+            //length++;
+            locateBall();
+        }
+    }
+
+    private void checkCollision() {
+        if(x[0] == size) ballIsLocated = true;
+        if(y[0] == size) ballIsLocated = true;
+        //if(x[0] < 0) ballIsLocated = true;
+        //if(y[0] < 0) ballIsLocated = true;
+        //for(int i=3; i<length; i++)
+            //if(x[0]==x[i] && y[0]==y[i]) ballIsLocated = true;
+    }
+
     private void move() {
-        for(int i=length-1; i>0; i--) {
+        for(int i=length; i>0; i--) { // must check here!!!
             x[i] = x[i-1];
             y[i] = y[i-1];
         }
-        //if(route==up) y[0]-=dot_size;
+
         if(route==down) y[0]+=dot_size;
-        if(route==right) x[0]+=dot_size;
-        if(route==left) x[0]-=dot_size;
+        if(route==right) {
+            x[0]+=dot_size;
+            y[0]+=dot_size;
+        }
+        if(route==left) {
+            x[0]-=dot_size;
+            y[0]+=dot_size;
+        }
     }
 
 }
