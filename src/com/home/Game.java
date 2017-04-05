@@ -10,6 +10,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Paint;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
 /**
@@ -21,7 +22,7 @@ public class Game extends Application {
     final int size=800, dot_size=40, right=2, down=3, left=4;
     int speeddelay=500, length=1, route=3, ball_x, ball_y;
     Canvas canvas;
-    GraphicsContext gc;
+    GraphicsContext gc, font;
     int x[] = new int[size*size];
     int y[] = new int[size*size];
     Thread game;
@@ -34,6 +35,7 @@ public class Game extends Application {
         StackPane root = new StackPane();
         canvas = new Canvas(size,size);
         gc = canvas.getGraphicsContext2D();
+        font = canvas.getGraphicsContext2D();
         canvas.setFocusTraversable(true);
         //root.getChildren().add(image);
         root.getChildren().add(canvas);
@@ -70,8 +72,11 @@ public class Game extends Application {
         if(!ballIsLocated) {
             //gc.setFill(Paint.valueOf("green"));
             //gc.fillOval(dot_size, dot_size);
+            font.setFont(Font.loadFont("ereer.bmp", 5000));
             gc.setFill(Paint.valueOf("red"));
             gc.fillOval(x[0], y[0], dot_size, dot_size);
+            //gc.setFill(Paint.valueOf("blue"));
+            gc.fillRect(size, size, size, size);
             //gc.setFill(Paint.valueOf("orange"));
 
             for(int i=0; i<length; i++) { // must check here!!!
@@ -97,15 +102,16 @@ public class Game extends Application {
             @Override
             public void run() {
                 while(true){
-                    if(!ballIsLocated){
+                    if(!ballIsLocated) {
                         checkBall();
                         checkCollision();
                         move();
                     }
                     draw(gc);
-                    try{
+                    //draw(font);
+                    try {
                         Thread.sleep(speeddelay);
-                    } catch(Exception e){
+                    } catch(Exception e) {
                         e.printStackTrace();
                     }
                 }
@@ -134,11 +140,19 @@ public class Game extends Application {
     }
 
     private void checkCollision() {
-        if(x[0] == size) ballIsLocated = true;
-        if(y[0] == size) ballIsLocated = true;
-        //if(x[0] < 0) ballIsLocated = true;
-        //if(y[0] < 0) ballIsLocated = true;
-        //for(int i=3; i<length; i++)
+        if(y[0] == 490) {
+            ballIsLocated = true;
+        }
+        if(x[0] == 490) {
+            y[0] += dot_size;
+        }
+        if(x[0] == 10) {
+            y[0] += dot_size;
+        }
+        if(y[0] == 10) {
+            ballIsLocated = true;
+        }
+        //for(int i=0; i<length; i++) // must check here!!!
             //if(x[0]==x[i] && y[0]==y[i]) ballIsLocated = true;
     }
 
@@ -147,11 +161,11 @@ public class Game extends Application {
             x[i] = x[i-1];
             y[i] = y[i-1];
         }
+        if(route == down) y[0] += dot_size;
 
-        if(route==down) y[0]+=dot_size;
-        if(route==right) {
-            x[0]+=dot_size;
-            y[0]+=dot_size;
+        if(route == right) {
+            x[0] += dot_size;
+            y[0] += dot_size;
         }
         if(route==left) {
             x[0]-=dot_size;
