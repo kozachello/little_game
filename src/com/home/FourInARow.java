@@ -27,31 +27,31 @@ public class FourInARow extends Application {
         HBox hbox4 = new HBox(10);
         HBox hbox5 = new HBox(10);
         HBox hbox6 = new HBox(10);
+        HBox hbox7 = new HBox(10);
         hbox1.setAlignment(Pos.CENTER);
         hbox2.setAlignment(Pos.CENTER);
         hbox3.setAlignment(Pos.CENTER);
         hbox4.setAlignment(Pos.CENTER);
         hbox5.setAlignment(Pos.CENTER);
         hbox6.setAlignment(Pos.CENTER);
+        hbox7.setAlignment(Pos.CENTER);
 
         vbox.setAlignment(Pos.BASELINE_CENTER);
 
         String buttonNumbers[] = {"1","2","3","4","5","6","7"};
         Button buttons[] = new Button[7];
-        Button btn1 = addButton("1");
-        Button btn2 = addButton("2");
-        Button btn3 = addButton("3");
-        Button btn4 = addButton("4");
-        Button btn5 = addButton("5");
-        Button btn6 = addButton("6");
-        Button btn7 = addButton("7");
+        int i=0;
+        while(i<buttons.length && i<buttonNumbers.length) {
+            for (Button b : buttons) {
+                b = addButton(buttonNumbers[i]);
+                hbox1.getChildren().add(b);
+                i++;
+            }
+        }
 
         vbox.getChildren().addAll();
-        hbox1.getChildren().addAll(btn1,btn2,btn3,btn4,btn5,btn6,btn7);
 
         root.setTop(hbox1);
-        //root.set(hbox2);
-        root.setLeft(vbox);
 
         Scene scene = new Scene(root,400,300);
         primaryStage.setScene(scene);
