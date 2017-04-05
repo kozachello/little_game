@@ -1,9 +1,5 @@
 package com.home;
 
-/**
- * Created by Козак on 04.04.2017.
- */
-
 import javafx.application.Application;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
@@ -11,15 +7,19 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Paint;
 import javafx.stage.Stage;
 
+/**
+ * Created by Козак on 05.04.2017.
+ */
 
-public class CanvasEx extends Application {
+public class Game extends Application {
 
-    final int size=500, dot_size=10, up=1, right=2, down=3, left=4;
-    int delay=100, length=3, route=3, food_x, food_y;
+    final int size=500, dot_size=20, right=2, down=3, left=4;
+    int speed=250, length=3, route=3;
     Canvas canvas;
     GraphicsContext gc;
     int x[] = new int[size*size];
@@ -28,19 +28,26 @@ public class CanvasEx extends Application {
     boolean lost = false;
 
     @Override
-    public void start(Stage primaryStage) {
+    public void start(Stage primaryStage) throws Exception {
         StackPane root = new StackPane();
         canvas = new Canvas(size,size);
         gc = canvas.getGraphicsContext2D();
         canvas.setFocusTraversable(true);
         root.getChildren().add(canvas);
-        startGame();
+        //startGame();
+
+        canvas.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+
+            }
+        });
 
         canvas.setOnKeyPressed(new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent e) {
                 KeyCode key = e.getCode();
-                if(key.equals(KeyCode.UP)) route = up;
+                //if(key.equals(KeyCode.UP)) route = up;
                 if(key.equals(KeyCode.DOWN)) route = down;
                 if(key.equals(KeyCode.LEFT)) route = left;
                 if(key.equals(KeyCode.RIGHT)) route = right;
@@ -49,7 +56,6 @@ public class CanvasEx extends Application {
         });
 
         Scene scene = new Scene(root, size, size);
-
         primaryStage.setTitle("MyGame");
         primaryStage.setScene(scene);
         primaryStage.show();
@@ -59,8 +65,8 @@ public class CanvasEx extends Application {
     private void draw(GraphicsContext gc) {
         gc.clearRect(0, 0, size, size);
         if(!lost) {
-            gc.setFill(Paint.valueOf("green"));
-            gc.fillOval(food_x, food_y, dot_size, dot_size);
+            //gc.setFill(Paint.valueOf("green"));
+            //gc.fillOval(dot_size, dot_size);
             gc.setFill(Paint.valueOf("red"));
             gc.fillOval(x[0], y[0], dot_size, dot_size);
             gc.setFill(Paint.valueOf("orange"));
@@ -76,34 +82,26 @@ public class CanvasEx extends Application {
         }
     }
 
-    /**
-     * @param args the command line arguments
-     */
-
-    public static void main(String[] args) {
-        launch(args);
-    }
-
     private void startGame() {
         length = 3;
         for(int i=0; i<length; i++){
             x[i] = 250-i*dot_size;
             y[i] = 30;
         }
-        locateFood();
+        //locateFood();
         game = new Thread(new Runnable() {
 
             @Override
             public void run() {
                 while(true){
                     if(!lost){
-                        checkFood();
-                        checkCollision();
+                        //checkFood();
+                        //checkCollision();
                         move();
                     }
                     draw(gc);
                     try{
-                        Thread.sleep(delay);
+                        Thread.sleep(speed);
                     } catch(Exception e){};
                 }
             }
@@ -113,25 +111,8 @@ public class CanvasEx extends Application {
         game.start();
     }
 
-    private void locateFood() {
-        food_x = (int)(Math.random()*((size/dot_size)-1))*dot_size;
-        food_y = (int)(Math.random()*((size/dot_size)-1))*dot_size;
-    }
-
-    private void checkFood() {
-        if(x[0]==food_x && y[0]==food_y){
-            length++;
-            locateFood();
-        }
-    }
-
-    private void checkCollision() {
-        if(x[0] >= size) lost = true;
-        if(y[0] >= size) lost = true;
-        if(x[0] < 0) lost = true;
-        if(y[0] < 0) lost = true;
-        for(int i=3; i<length; i++)
-            if(x[0]==x[i] && y[0]==y[i]) lost = true;
+    public static void main(String[] args) {
+        launch(args);
     }
 
     private void move() {
@@ -139,7 +120,7 @@ public class CanvasEx extends Application {
             x[i] = x[i-1];
             y[i] = y[i-1];
         }
-        if(route==up) y[0]-=dot_size;
+        //if(route==up) y[0]-=dot_size;
         if(route==down) y[0]+=dot_size;
         if(route==right) x[0]+=dot_size;
         if(route==left) x[0]-=dot_size;
