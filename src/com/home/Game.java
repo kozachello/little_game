@@ -133,27 +133,28 @@ public class Game extends Application {
     }
 
     private void checkBall() {
-        if(y[0]==490) {
+        if(y[0] == size) {
             //length++;
             locateBall();
+            return;
         }
     }
 
     private void checkCollision() {
-        if(y[0] == 490) {
+        if(y[0] == size) {
             ballIsLocated = true;
         }
-        if(x[0] == 490) {
+        if(x[0] == size) {
             y[0] += dot_size;
         }
-        if(x[0] == 10) {
+        if(x[0] == 0) {
             y[0] += dot_size;
         }
-        if(y[0] == 10) {
+        if(y[0] == 0) {
             ballIsLocated = true;
         }
-        //for(int i=0; i<length; i++) // must check here!!!
-            //if(x[0]==x[i] && y[0]==y[i]) ballIsLocated = true;
+        for(int i=1; i<=length; i++) // must check here!!!
+            if(x[0]==x[i] && y[0]==y[i]) ballIsLocated = true;
     }
 
     private void move() {
