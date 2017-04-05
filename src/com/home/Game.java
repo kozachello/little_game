@@ -13,7 +13,7 @@ import javafx.scene.paint.Paint;
 import javafx.stage.Stage;
 
 /**
- * Created by Козак on 05.04.2017.
+ * Created by Козак on 04.04.2017.
  */
 
 public class Game extends Application {
