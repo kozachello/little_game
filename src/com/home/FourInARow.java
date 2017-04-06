@@ -62,13 +62,14 @@ public class FourInARow extends Application {
         vbox.getChildren().addAll();
 
         root.setTop(hbox1);
+        //root.setStyle("-fx-background-image: url('ereer.bmp'); -fx-background-position: center center; -fx-background-repeat: stretch;");
         //root.setLeft(vbox);
         //PlayArea pa = new PlayArea();
 
         //Scene scene = new Scene(, 400, 300);
         //Scene scene = new Scene(area, 400, 300, Paint.valueOf("blue"));
-        Scene scene = new Scene(root,600,520);
-        scene.getStylesheets().addAll(this.getClass().getResource("Style.css").toExternalForm());
+        Scene scene = new Scene(root,420,350);
+        //scene.getStylesheets().addAll(this.getClass().getResource("Style.css").toExternalForm());
 
         primaryStage.setScene(scene);
         primaryStage.show();
