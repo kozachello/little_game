@@ -8,9 +8,9 @@ import javafx.application.Application;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
+import javafx.scene.control.Label;
+import javafx.scene.layout.*;
+import javafx.scene.paint.Paint;
 import javafx.stage.Stage;
 
 public class FourInARow extends Application {
@@ -20,6 +20,15 @@ public class FourInARow extends Application {
         primaryStage.setTitle("MyApp");
         BorderPane root = new BorderPane();
         VBox vbox = new VBox(10);
+        //StackPane root = new StackPane();
+
+        /*GridPane area = new GridPane();
+        area.setGridLinesVisible(true);
+        area.add(new Label("0x0"), 0, 0);
+        area.add(new Label("0x1"), 0, 1);
+        area.add(new Label("1x1"), 1, 1);
+        area.add(new Label("1x2"), 1, 2);
+        area.add(new Label("5x5"), 5, 5);*/
 
         HBox hbox1 = new HBox(10);
         HBox hbox2 = new HBox(10);
@@ -45,6 +54,7 @@ public class FourInARow extends Application {
             for (Button b : buttons) {
                 b = addButton(buttonNumbers[i]);
                 hbox1.getChildren().add(b);
+                //vbox.getChildren().add(b);
                 i++;
             }
         }
@@ -52,8 +62,14 @@ public class FourInARow extends Application {
         vbox.getChildren().addAll();
 
         root.setTop(hbox1);
+        //root.setLeft(vbox);
+        //PlayArea pa = new PlayArea();
 
-        Scene scene = new Scene(root,400,300);
+        //Scene scene = new Scene(, 400, 300);
+        //Scene scene = new Scene(area, 400, 300, Paint.valueOf("blue"));
+        Scene scene = new Scene(root,600,520);
+        scene.getStylesheets().addAll(this.getClass().getResource("Style.css").toExternalForm());
+
         primaryStage.setScene(scene);
         primaryStage.show();
     }
